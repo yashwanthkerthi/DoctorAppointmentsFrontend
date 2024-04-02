@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
+import Notification from "../../Components/Notification/Notification";
+import Cookies from "js-cookie";
 
 import React, { useState } from "react";
 import Navbar from "../../Navbar/Navbar";
@@ -30,10 +32,20 @@ const Dashboard = () => {
   const [date, setDate] = useState(null);
   const [time, setTime] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState(null);
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
 
   const [openModal, setOpenModal] = useState(false);
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
+
+  const headers = {
+    "Authorization":`Bearer ${Cookies.get("jwt_token")}`,
+    'Content-Type': 'application/json',
+  }
 
   const submitAppointmentForm = async (e) => {
     e.preventDefault();
@@ -47,9 +59,24 @@ const Dashboard = () => {
         time,
         phoneNumber,
       };
-      console.log("formData", formData);
-      const response = await axios.post("applicationformurl", formData);
+      const response = await axios.post("http://localhost:5000/api/appointment", formData,{headers});
+      if(response.data.api_status===200){
+        setNotify({message:response.data.message,type:"success",isOpen:true})
+        setOpenModal(false)
+        setFirstName("")
+        setLastName("")
+        setDate("")
+        setPhoneNumber("")
+        setAddress("")
+        setEmail("")
+        setTime("")
+      }
+      else{
+        setNotify({message:response.data.message,type:"error",isOpen:true})
+      }
+      // console.log("response",response);
     } catch (error) {
+      setNotify({message:"Enter Valid Details",type:"error",isOpen:true})
       console.log("error", error);
     }
   };
@@ -75,7 +102,7 @@ const Dashboard = () => {
           }}
           onClick={handleOpen}
         >
-          Click her to book your appointment
+          Click here to book your appointment
         </Button>
       </div>
       <Modal
@@ -159,6 +186,7 @@ const Dashboard = () => {
           </form>
         </Box>
       </Modal>
+      <Notification notify={notify} setNotify={setNotify} />
     </>
   );
 };

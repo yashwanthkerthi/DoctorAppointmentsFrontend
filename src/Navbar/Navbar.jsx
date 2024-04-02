@@ -16,6 +16,9 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import PeopleIcon from "@mui/icons-material/People";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+
 
 // import MailIcon from "@mui/icons-material/MailIcon"
 
@@ -89,6 +92,7 @@ const Drawer = styled(MuiDrawer, {
 export default function Navbar() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate()
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -97,6 +101,11 @@ export default function Navbar() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const handleLogout = () =>{
+    Cookies.remove("jwt_token")
+    navigate("/signin")
+  }
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -117,6 +126,9 @@ export default function Navbar() {
           </IconButton>
           <Typography variant="h6" noWrap component="div">
             Appointment Portal
+          </Typography>
+          <Typography onClick={handleLogout} style={{cursor:"pointer",marginLeft:"auto"}} variant="h6" noWrap component="div">
+            Logout
           </Typography>
         </Toolbar>
       </AppBar>

@@ -4,18 +4,38 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from '@mui/material/Button';
 import { useNavigate,Link } from "react-router-dom";
+import Cookies from "js-cookie";
+import Notification from "../../Components/Notification/Notification";
 
 
 const Signin = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate()
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
       const postData = { email, password };
-      const response = await axios.post("http://localhost:5000/", postData);
+      const response = await axios.post("http://localhost:5000/api/signin", postData);
+      console.log(response);
+      if(response.data.api_status===200){
+        console.log("token",response.data.data.jwtToken);
+        Cookies.set("jwt_token",response.data.data.jwtToken)
+        setTimeout(() => {
+          navigate("/")
+        }, 2000);          
+        setNotify({message:response.data.message,type:"success",isOpen:true})
+      }
+      else{
+        setNotify({message:response.data.message,type:"error",isOpen:true})
+      }
     } catch (error) {
       console.log("error occurred ", error);
     }
@@ -53,6 +73,7 @@ const Signin = () => {
           value={password}
           id="outlined-basic"
           label="Password"
+          type="password"
           variant="outlined"
         />
 
@@ -67,9 +88,10 @@ const Signin = () => {
           Already have an account / Signup account
         </Link>
         <Button type="submit" style={{ width: "120px" }} variant="contained">
-          Register
+          Signin
         </Button>
       </Box>
+      <Notification notify={notify} setNotify={setNotify} />
     </div>
   );
 };

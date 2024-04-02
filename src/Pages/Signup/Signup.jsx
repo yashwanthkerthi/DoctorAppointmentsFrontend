@@ -4,18 +4,41 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useNavigate, Link } from "react-router-dom";
+import Cookies from "js-cookie";
+import Notification from "../../Components/Notification/Notification";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate()
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
       const postData = { firstName, lastName, email, password };
-      const response = await axios.post("http://localhost:5000/", postData);
+      const response = await axios.post("http://localhost:5000/api/signup", postData);
+      if(response.data.api_status===200){
+        Cookies.set("jwt_token",response.data.jwtToken)
+        setTimeout(() => {
+          navigate("/")
+        }, 2000);
+        setNotify({message:response.data.message,type:"success",isOpen:true})
+        setFirstName("")
+        setLastName("")
+        setEmail("")
+        setPassword("")
+      }
+      else{
+        setNotify({message:response.data.message,type:"error",isOpen:true})
+
+      }
     } catch (error) {
       console.log("error occurred ", error);
     }
@@ -64,6 +87,7 @@ const Signup = () => {
         <TextField
           onChange={(e) => setPassword(e.target.value)}
           value={password}
+          type="password"
           id="Password"
           label="Password"
           variant="outlined"
@@ -82,6 +106,7 @@ const Signup = () => {
         <Button type="submit" style={{ width: "120px" }} variant="contained">
           Register
         </Button>
+        <Notification notify={notify} setNotify={setNotify} />
       </Box>
     </div>
   );
