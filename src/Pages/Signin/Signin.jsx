@@ -28,6 +28,7 @@ const Signin = () => {
       if(response.data.api_status===200){
         console.log("token",response.data.data.jwtToken);
         Cookies.set("jwt_token",response.data.data.jwtToken)
+        Cookies.set("name",response.data.data.first_name)
         setTimeout(() => {
           navigate("/")
         }, 2000);          

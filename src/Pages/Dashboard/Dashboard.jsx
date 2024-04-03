@@ -43,9 +43,9 @@ const Dashboard = () => {
   const handleClose = () => setOpenModal(false);
 
   const headers = {
-    "Authorization":`Bearer ${Cookies.get("jwt_token")}`,
-    'Content-Type': 'application/json',
-  }
+    Authorization: `Bearer ${Cookies.get("jwt_token")}`,
+    "Content-Type": "application/json",
+  };
 
   const submitAppointmentForm = async (e) => {
     e.preventDefault();
@@ -59,24 +59,39 @@ const Dashboard = () => {
         time,
         phoneNumber,
       };
-      const response = await axios.post("http://localhost:5000/api/appointment", formData,{headers});
-      if(response.data.api_status===200){
-        setNotify({message:response.data.message,type:"success",isOpen:true})
-        setOpenModal(false)
-        setFirstName("")
-        setLastName("")
-        setDate("")
-        setPhoneNumber("")
-        setAddress("")
-        setEmail("")
-        setTime("")
-      }
-      else{
-        setNotify({message:response.data.message,type:"error",isOpen:true})
+      const response = await axios.post(
+        "http://localhost:5000/api/appointment",
+        formData,
+        { headers }
+      );
+      if (response.data.api_status === 200) {
+        setNotify({
+          message: response.data.message,
+          type: "success",
+          isOpen: true,
+        });
+        setOpenModal(false);
+        setFirstName("");
+        setLastName("");
+        setDate("");
+        setPhoneNumber("");
+        setAddress("");
+        setEmail("");
+        setTime("");
+      } else {
+        setNotify({
+          message: response.data.message,
+          type: "error",
+          isOpen: true,
+        });
       }
       // console.log("response",response);
     } catch (error) {
-      setNotify({message:"Enter Valid Details",type:"error",isOpen:true})
+      setNotify({
+        message: "Enter Valid Details",
+        type: "error",
+        isOpen: true,
+      });
       console.log("error", error);
     }
   };
@@ -129,6 +144,7 @@ const Dashboard = () => {
               id="First name"
               label="First name"
               variant="outlined"
+              style={{ margin: "5px" }}
             />
             <TextField
               onChange={(e) => setLastName(e.target.value)}
@@ -136,6 +152,7 @@ const Dashboard = () => {
               id="Last name"
               label="Last name"
               variant="outlined"
+              style={{ margin: "5px" }}
             />
             <TextField
               onChange={(e) => setEmail(e.target.value)}
@@ -143,6 +160,7 @@ const Dashboard = () => {
               id="Email"
               label="Email"
               variant="outlined"
+              style={{ margin: "5px" }}
             />
             <TextField
               onChange={(e) => setPhoneNumber(e.target.value)}
@@ -150,6 +168,7 @@ const Dashboard = () => {
               id="Phone number"
               label="Phone number"
               variant="outlined"
+              style={{ margin: "5px" }}
             />
             <TextField
               onChange={(e) => setAddress(e.target.value)}
@@ -157,6 +176,7 @@ const Dashboard = () => {
               id="Address"
               label="Address"
               variant="outlined"
+              style={{ margin: "5px" }}
             />
             <TextField
               onChange={(e) => setDate(e.target.value)}
@@ -164,6 +184,7 @@ const Dashboard = () => {
               id="date"
               type="date"
               variant="outlined"
+              style={{ margin: "5px" }}
             />
             <TextField
               onChange={(e) => setTime(e.target.value)}
@@ -171,6 +192,7 @@ const Dashboard = () => {
               id="time"
               type="time"
               variant="outlined"
+              style={{ margin: "5px" }}
             />
             <div
               style={{

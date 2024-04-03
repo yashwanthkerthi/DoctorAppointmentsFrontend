@@ -104,6 +104,7 @@ export default function Navbar() {
 
   const handleLogout = () =>{
     Cookies.remove("jwt_token")
+    Cookies.remove("name")
     navigate("/signin")
   }
 
