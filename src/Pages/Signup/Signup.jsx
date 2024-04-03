@@ -24,8 +24,10 @@ const Signup = () => {
     try {
       const postData = { firstName, lastName, email, password };
       const response = await axios.post("http://localhost:5000/api/signup", postData);
+      console.log(response);
       if(response.data.api_status===200){
-        Cookies.set("jwt_token",response.data.jwtToken)
+        Cookies.set("jwt_token",response.data.data.jwtToken)
+        Cookies.set("name",response.data.data.first_name)
         setTimeout(() => {
           navigate("/")
         }, 2000);

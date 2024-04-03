@@ -127,9 +127,15 @@ export default function Navbar() {
           <Typography variant="h6" noWrap component="div">
             Appointment Portal
           </Typography>
+          <div style={{marginLeft:"auto",display:"flex",justifyContent:"space-between"}}  >
+          <Typography style={{marginRight:"50px",}} variant="h6" noWrap component="div">
+            USER : {Cookies.get("name").toUpperCase()}
+          </Typography>
           <Typography onClick={handleLogout} style={{cursor:"pointer",marginLeft:"auto"}} variant="h6" noWrap component="div">
             Logout
           </Typography>
+          </div>
+
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
